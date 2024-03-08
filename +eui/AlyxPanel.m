@@ -278,7 +278,14 @@ classdef AlyxPanel < handle
                         thisDir = fullfile(dat.reposPath('main', 'master'), firstTimeSubs{fts});
                         if ~exist(thisDir, 'dir')
                             fprintf(1, 'making directory for %s\n', firstTimeSubs{fts});
-                            mkdir(thisDir);
+                            try
+                                mkdir(thisDir);
+                            catch ex
+                                fprintf(2, "login was successful, but failed to connect to: %s.\n", dat.reposPath('main', 'master'));
+                                fprintf(2, "due to the following error: %s", ex.message)
+                                fprintf(2, "logging out.\n")
+                                obj.login()
+                            end
                         end
                     end
                 elseif obj.AlyxInstance.Headless
